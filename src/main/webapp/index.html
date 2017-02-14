@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demoApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta fname="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta fname="description" content="">
+    <meta fname="author" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="QFormJSRValidationModule.js"></script>
+
+    <style>
+        body {
+            margin-top: 80px;
+        }
+
+        .form-control.ng-invalid.ng-pristine {
+               -moz-box-shadow:    inset 0 0 5px red !important;
+               -webkit-box-shadow: inset 0 0 5px red !important;
+               box-shadow:         inset 0 0 5px red !important;
+           }
+
+        div.ng-invalid.ng-pristine .form-control.ui-select-toggle
+        {
+            -moz-box-shadow:    inset 0 0 5px red !important;
+            -webkit-box-shadow: inset 0 0 5px red !important;
+            box-shadow:         inset 0 0 5px red !important;
+        }
+
+        .field-error {
+            display: none;
+            color: red;
+        }
+
+        .field-error ul {
+                padding: 0 0 0 2px;
+                margin: 0;
+            }
+
+        .field-error ul {
+            list-style: none;
+        }
+        form-error {
+            display: none;
+            color: red;
+        }
+    </style>
+
+    <script>
+        angular.module('demoApp', ['QFormJSRValidation'])
+            .controller('DemoController', ['$scope', 'QFormJSRValidation',
+                function ($scope, QFormJSRValidation) {
+                this.contact = {};
+                this.createContact = function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'cxf/api/addressbook',
+                        data: JSON.stringify(this.contact),
+                        contentType : 'application/json',
+                        success: function () {
+                            alert('Contact created!');
+                        },
+                        error: function (response) {
+                            if (response.status == 400) { // Validation errors.
+                                QFormJSRValidation.markErrors($scope, $scope.contactForm, response.responseJSON);
+                            } else if (response.status == 500) {
+                                alert('Something went terribly wrong!');
+                            }
+                        }
+                    })
+                }
+            }]);
+    </script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">DevDays 200</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Data validations</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container" ng-controller="DemoController as ctrl">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Data validations examples</h1>
+
+            <form ng-submit="ctrl.createContact()" name="contactForm" shows-validation-errors>
+                <hr>
+                <field-error form-element-name="fname" class="field-error"></field-error>
+                <hr>
+                <div class="form-group">
+                    <label>First name</label>
+                    <field-error form-element-name="fname" class="field-error"></field-error>
+                    <input ng-model="ctrl.contact.fname" class="form-control"
+                           name="fname">
+                </div>
+                <div class="form-group">
+                    <label>Last name</label>
+                    <field-error form-element-name="lname" class="field-error"></field-error>
+                    <input ng-model="ctrl.contact.lname" class="form-control"
+                           name="lname">
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <field-error form-element-name="age" class="field-error"></field-error>
+                    <input ng-model="ctrl.contact.age" class="form-control"
+                           name="age">
+                </div>
+                <div class="form-group">
+                    <label>Year of birth</label>
+                    <field-error form-element-name="year" class="field-error"></field-error>
+                    <input ng-model="ctrl.contact.year" class="form-control"
+                           name="year">
+                </div>
+                <div class="form-group">
+                    <label>SSN</label>
+                    <field-error form-element-name="ssn" class="field-error"></field-error>
+                    <input ng-model="ctrl.contact.ssn" class="form-control"
+                           name="ssn">
+                </div>
+                <button type="submit" class="btn btn-default">Create contact
+                </button>
+            </form>
+        </div>
+    </div>
+</div><!-- /.container -->
+</body>
+</html>

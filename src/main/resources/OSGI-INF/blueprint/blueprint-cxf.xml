@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs">
+
+    <bean id="HibernateValidatorFactory"
+          class="com.eurodyn.qlack2.util.hibernate.validator.resolver.HibernateValidatorFactory"/>
+    <bean id="ValidationProvider" class="org.apache.cxf.validation.BeanValidationProvider">
+        <argument ref="HibernateValidatorFactory"/>
+    </bean>
+    <bean id="ValidationInInterceptor" class="org.apache.cxf.jaxrs.validation.JAXRSBeanValidationInInterceptor">
+        <property name="provider" ref="ValidationProvider" />
+    </bean>
+
+    <jaxrs:server id="DevDays200RS" address="/api">
+        <jaxrs:serviceBeans>
+            <ref component-id="addressbookResource"/>
+        </jaxrs:serviceBeans>
+
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+            <bean id="ValidationExceptionMapper"
+                  class="com.eurodyn.qlack2.util.jsr.validator.util.mapper.ValidationExceptionMapper"/>
+        </jaxrs:providers>
+
+        <jaxrs:inInterceptors>
+            <ref component-id="ValidationInInterceptor" />
+        </jaxrs:inInterceptors>
+    </jaxrs:server>
+
+</blueprint>

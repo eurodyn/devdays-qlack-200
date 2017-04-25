@@ -39,7 +39,7 @@ public class AddressbookResource {
 			errors.add(new ValidationError("ssn", "A person with the same SSN is already registered."));
 		}
 
-		if (contactDTO.getAge() == 0 || contactDTO.getYear() == 0) {
+		if (contactDTO.getAge() == 0 && contactDTO.getYear() == 0) {
 			errors.add(new ValidationError("age", "Age or year should be filed-in."));
 			errors.add(new ValidationError("year", "Age or year should be filed-in."));
 		}

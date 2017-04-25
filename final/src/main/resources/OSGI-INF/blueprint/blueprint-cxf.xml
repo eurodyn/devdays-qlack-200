@@ -18,8 +18,13 @@
 
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+
+            <bean id="InvalidFormatExceptionMapper"
+                  class="com.eurodyn.qlack2.util.jsr.validator.util.mapper.InvalidFormatExceptionMapper"/>
             <bean id="ValidationExceptionMapper"
                   class="com.eurodyn.qlack2.util.jsr.validator.util.mapper.ValidationExceptionMapper"/>
+            <bean id="JSONMappingExceptionMapper"
+                  class="com.eurodyn.qlack2.util.jsr.validator.util.mapper.JSONMappingExceptionMapper"/>
         </jaxrs:providers>
 
         <jaxrs:inInterceptors>
